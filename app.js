@@ -1,129 +1,83 @@
-var bodyParser = require("body-parser"),
-methodOverride = require("method-override"),
-	mongoose   = require("mongoose"),
-	express    = require("express"),
-expressSantitzer= require("express-sanitizer"),	
-	app        = express();
-
+var express       = require("express"),
+    app           = express(),
+    bodyParser    = require("body-parser"),
+	mongoose      = require("mongoose"),
+	passport      = require("passport"),
+	flash         = require("connect-flash"),
+	LocalStrategy = require("passport-local"),
+	methodOverride= require("method-override"),
+	Campground    = require("./models/campground"),
+	Comment       = require("./models/comment"),
+	User          = require("./models/user"),
+expressSantitzer  = require("express-sanitizer")	
+	
+//requiring routes
+var commentRoutes    = require("./routes/comments"),
+	blogRoutes = require("./routes/blogs"),
+	indexRoutes      = require("./routes/index");
+    
+   var url = process.env.DATABASEURL ||  "mongodb://localhost/restful_blog_app"
+mongoose.connect(url,{
+	useNewUrlParser:true,
+	useCreateIndex:true
+});
+    
 //APP CONFIG
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-mongoose.connect("mongodb://localhost/restful_blog_app");
+// mongoose.connect("mongodb://localhost/restful_blog_app");
 app.set("view engine","ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressSantitzer());
 app.use(methodOverride("_method"))
-
-//MONGOOSE MODEL CONFIG
-var blogSchema= new mongoose.Schema({
-	title:String,
-	image:String,
-	body:String,
-	created: {type:Date , default: Date.now}
-});
-
-var Blog= mongoose.model("Blog",blogSchema);
+app.use(flash());
 
 
-//RESTFUL ROUTES
 
-app.get("/",function(req,res){
-	res.redirect("/blogs");
-})
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+	secret:"rusty is the best dog in the world",
+	resave: false,
+	saveUninitialized:false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser()); 
+passport.deserializeUser(User.deserializeUser());//decode the password 
 
-//INDEX
-app.get("/blogs",function(req,res){
-		Blog.find({},function(err,blogs){
-			if(err){
-				console.log("ERROR!");
-			}else{
-				res.render("index",{blogs:blogs});
-			}
-		});
-});
-
-//NEW route
-app.get("/blogs/new",function(req,res){
-	res.render("new");
-})
-
-//CREATE Route
-app.post("/blogs",function(req,res){
-	//sanitize the body(content of blog) coming from the form under blog so that no //script tags are used 
-	req.body.blog.body=req.sanitize(req.body.blog.body);
+// this'll call this functn on every route
+app.use(function(req,res,next){
+	res.locals.currentUser = req.user;//req.user will either contain da user or not
+	res.locals.error       = req.flash("error");
+	res.locals.success     = req.flash("success");
 	
-	//create blog
-	Blog.create(req.body.blog,function(err,newBlog){ // we stored body,img,tit in blog //systematically , so req.body.blogs automaticaly gets all three.
-		if(err){
-			res.render("new");
-		}else{
-			//redirect backto index
-			res.redirect("/blogs");
-		}
-	});
-});
-
-//SHOW Route
-app.get("/blogs/:id",function(req,res){
-var id = mongoose.Types.ObjectId(req.params.id); 
-	Blog.findById(id,function(err,foundBlog){
-		if(err){
-			res.redirect("/blogs");
-		}else{
-			res.render("show",{blog:foundBlog});
-		}
-	});
-});
-
-//EDIT Route
-app.get("/blogs/:id/edit",function(req,res){
-	var id = mongoose.Types.ObjectId(req.params.id);
-	Blog.findById(id,function(err,foundBlog){
-		if(err){
-			res.redirect("/blogs");
-		}else{
-			res.render("edit",{blog:foundBlog});
-		}
-	});
-});
-
-//UPDATE Route
-app.put("/blogs/:id",function(req,res){
-	req.body.blog.body=req.sanitize(req.body.blog.body);
-	var id= mongoose.Types.ObjectId(req.params.id);
-	Blog.findByIdAndUpdate(id,req.body.blog,function(err,updatedForm){
-		if(err){
-			res.redirect("/blogs");
-		}else{
-			res.redirect("/blogs/"+id);
-		}
-	});
-	
-});
-
-//DELET Route
-app.delete("/blogs/:id",function(req,res){
-	//destroy blog
-	var id = mongoose.Types.ObjectId(req.params.id);
-	Blog.findByIdAndRemove(id,function(err){
-		if(err){
-			res.redirect("/blogs");
-		}else{
-			res.redirect("/blogs");
-		}
-	});
-});
-
-
-
-
-
-app.listen(3000,function(){
-	console.log("Restful Blog app is listening now.");
+	next(); // as it is a middleware on every route.
+	// all it does is ,that is passes req.user as variable currentUser on every route
 })
+
+
+app.use(commentRoutes);
+app.use(blogRoutes);
+app.use(indexRoutes);
+
+
+
+
+
+
+
+
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`BlogSite server is listening now on ${ PORT }`);
+});
+
 
 

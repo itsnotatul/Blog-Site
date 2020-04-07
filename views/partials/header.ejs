@@ -5,12 +5,57 @@
 		<link rel="stylesheet" type="text/css" href="/stylesheets/app.css">
 	</head>
 	<body>
-		<div class="ui fixed inverted menu">
-			<div class="ui container">
-				<div class="header item"><i class = "code icon"></i>Blog Site</div>
-				<a href="/" class="item">Home</a>
-				<a href="/blogs/new" class="item">New Post</a>
-			</div>
+		<div class="ui inverted menu">
+			  <a class="active item">
+				<i class = "code icon"></i>BlogSite
+			  </a>
+
+			  <div class="right menu">
+               <% if(!currentUser){ %>
+				  
+				  <div class="item">
+					<div class="ui primary button"><a href="/login">Login</a></div>
+				  </div>
+				  <div class="item">
+					<div class="ui primary button"><a href="/register">Sign Up</a></div>
+				  </div>
+                    <% } else { %>
+					  <div class="item">
+						<div class="ui primary button">Signed In As <%= currentUser.username %></div>
+					  </div>
+                    <div class="item">
+					  <div class="ui primary button"><a href="/logout">Logout</a></div>
+				     </div>
+                        
+                    <% } %>
+				
+			  </div>
 		</div>
+		
+    <div>
+        
+        <% if(error && error.length > 0){ %>
+            <div class="ui negative message" >
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>
+            <div class="ui positive message" >
+                <%= success %>
+            </div>
+        <% } %>
+    </div>		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	
