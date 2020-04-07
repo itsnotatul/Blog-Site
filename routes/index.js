@@ -4,9 +4,9 @@ var passport= require("passport");
 var User    = require("../models/user");
 var mongoose = require("mongoose");
 
-// router.get("/",function(req,res){
-// 	res.render("landing");
-// });
+router.get("/",function(req,res){
+	res.redirect("/blogs");
+})
 
 //AUTH ROUTE
 
