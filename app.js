@@ -6,10 +6,10 @@ var express       = require("express"),
 	flash         = require("connect-flash"),
 	LocalStrategy = require("passport-local"),
 	methodOverride= require("method-override"),
-	Campground    = require("./models/campground"),
+	Blog          = require("./models/blog"),
 	Comment       = require("./models/comment"),
 	User          = require("./models/user"),
-expressSantitzer  = require("express-sanitizer")	
+expressSantizer  = require("express-sanitizer")	;
 	
 //requiring routes
 var commentRoutes    = require("./routes/comments"),
@@ -32,7 +32,7 @@ mongoose.set('useUnifiedTopology', true);
 app.set("view engine","ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(expressSantitzer());
+app.use(expressSantizer());
 app.use(methodOverride("_method"))
 app.use(flash());
 

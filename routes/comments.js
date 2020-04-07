@@ -2,7 +2,7 @@ var express = require("express");
 var router  = express.Router();
 var mongoose = require("mongoose");
 
-var Blog = require("../models/campground");
+var Blog = require("../models/blog");
 var Comment = require("../models/comment");
 var middleware = require("../middleware");
 

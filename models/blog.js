@@ -9,7 +9,7 @@ mongoose.set('useUnifiedTopology', true);
 var blogSchema = new mongoose.Schema({
 	title: String, 
 	image : String,
-	description:String,
+	body:String,
 	author:{
 		id:{
 		      type:mongoose.Schema.Types.ObjectId,
