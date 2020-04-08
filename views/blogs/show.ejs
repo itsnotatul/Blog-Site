@@ -11,15 +11,55 @@
 			<div class="description">
 				<p><%- blog["body"] %></p>
 			</div>
+			
+			<p>
+						<em>
+							Submitted by:<strong> <%= blog["author"]["username"] %></strong>
+							 
+						</em>
+					</p>
+			<% if(currentUser && blog["author"]["id"].equals(currentUser._id)  ){ %>
 			<a class="ui orange basic button" href="/blogs/<%=blog["_id"]%>/edit">Edit</a>
 			<form id="delete" action="/blogs/<%=blog["_id"]%>?_method=DELETE" method="POST">
 				<button class="ui red basic button">Delete</button>
 			</form>
+			<% } %>
 		</div>
 	</div>
+	
 </div>
 
+   <!-- adding comment section -->
 
+<div class= "ui main text container segment" id="myid">
+		<div class="ui right aligned segment">
+	       <a class="ui blue button" href="/blogs/<%= blog["_id"]%>/comments/new">  
+                Add New Comment</a>
+	    </div>
+	
+	<hr>
+          <% for(var i=0;i<blog["comments"].length;i++){ %> <!--comments                         attribute ofCampgrnd mdl is an //array -->
+            
+              <div class="ui vertical segment">
+              <strong><%=blog["comments"][i]["author"]["username"] %></strong>  
+                <span class="right">10 days ago</span>
+                <p>
+                  <%= blog["comments"][i]["text"] %>
+                </p>
+    <% if(currentUser && blog["comments"][i]["author"]["id"].equals(currentUser._id)  ){ %>             
+                
+<a href="/blogs/<%= blog["_id"]%>/comments/<%= blog["comments"][i]["_id"] %>/edit" class ="ui mini yellow button">Edit</a>              
+                
+<form action="/blogs/<%= blog["_id"]%>/comments/<%= blog["comments"][i]["_id"] %>?_method=DELETE"   method ="POST" id="form-delete">
+  <input type="submit"  value="Delete" class="ui mini red button">
+                </form>
+                
+                <% } %> 
+              </div>
+              
+          
+          <% } %>
+  </div>
 
 
 

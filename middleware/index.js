@@ -1,4 +1,5 @@
 var Blog= require("../models/blog");
+var User= require("../models/user")
 var Comment= require("../models/comment");
 var mongoose = require("mongoose");
 

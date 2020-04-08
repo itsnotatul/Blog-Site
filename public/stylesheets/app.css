@@ -9,3 +9,12 @@ i.icon{
 #delete{
 	display:inline;
 }
+
+#form-delete{
+	display:inline;
+}
+
+#myid{
+	margin-bottom:5.0em;
+	padding-bottom:6.0em;
+}

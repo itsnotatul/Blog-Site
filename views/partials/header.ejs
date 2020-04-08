@@ -6,25 +6,32 @@
 	</head>
 	<body>
 		<div class="ui inverted menu">
-			  <a class="active item">
+			  <a class="active  item" href="/blogs">
 				<i class = "code icon"></i>BlogSite
 			  </a>
-
+			
+			
+				<a class=" blue item"  href="/blogs/new">
+				   Add a new Blog
+				  </a>
+			
+			  
+			
 			  <div class="right menu">
                <% if(!currentUser){ %>
 				  
 				  <div class="item">
-					<div class="ui primary button"><a href="/login">Login</a></div>
+					<div class="ui inverted blue button"><a href="/login">Login</a></div>
 				  </div>
 				  <div class="item">
-					<div class="ui primary button"><a href="/register">Sign Up</a></div>
+					<button class="ui inverted teal button"><a href="/register">Sign Up</a></button>
 				  </div>
                     <% } else { %>
 					  <div class="item">
-						<div class="ui primary button">Signed In As <%= currentUser.username %></div>
+						<div class="ui inverted blue button">Signed In As <%= currentUser.username %></div>
 					  </div>
                     <div class="item">
-					  <div class="ui primary button"><a href="/logout">Logout</a></div>
+					  <div class="ui inverted teal button"><a href="/logout">Logout</a></div>
 				     </div>
                         
                     <% } %>

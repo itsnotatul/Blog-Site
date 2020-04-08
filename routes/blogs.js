@@ -21,12 +21,18 @@ router.get("/blogs/new",middleware.isLoggedIn,function(req,res){
 })
 
 //CREATE Route
-router.post("/blogs",function(req,res){
+router.post("/blogs",middleware.isLoggedIn,function(req,res){
 	//sanitize the body(content of blog) coming from the form under blog so that no //script tags are used 
 	req.body.blog.body=req.sanitize(req.body.blog.body);
+	var author={
+				 id:req.user._id,
+				username:req.user.username
+			}
+
+    var newBlog = {title: req.body.blog.title, image: req.body.blog.image, body: req.body.blog.body, created: req.body.blog.created, author:author};
 	
 	//create blog
-	Blog.create(req.body.blog,function(err,newBlog){ // we stored body,img,tit in blog //systematically , so req.body.blogs automaticaly gets all three.
+	Blog.create(newBlog,function(err,newlyCreated){ // we stored body,img,tit in blog //systematically , so req.body.blogs automaticaly gets all three.
 		if(err){
 			res.render("new");
 		}else{
@@ -50,7 +56,7 @@ var id = mongoose.Types.ObjectId(req.params.id);
 });
 
 //EDIT Route
-router.get("/blogs/:id/edit",function(req,res){
+router.get("/blogs/:id/edit",middleware.checkBlogOwnership,function(req,res){
 	var id = mongoose.Types.ObjectId(req.params.id);
 	Blog.findById(id,function(err,foundBlog){
 		if(err){

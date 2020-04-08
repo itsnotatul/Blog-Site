@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 
-<div class= "ui main text container ">
+<div class= "ui main text container  ">
 	<div class="ui huge header">RESTful Blog App</div>
 	<div class = "ui top attached segment">
 	  <div class="ui divided items">
@@ -12,7 +12,7 @@
 					<div class="content">
 						<a class="header" href="/blogs/<%=blogs[i]["_id"] %>">  <%=blogs[i]["title"]%> </a>
 						<div clas="meta"><!-- info about this particular thing-->
-							<span> 10 days ago </span>	
+							<span> <%= blogs[i]["created"].toDateString() %> </span>	
 						</div>
 						<div class="description">
 							<p><%- blogs[i]["body"].substring(0,100) %></p>
