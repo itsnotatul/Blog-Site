@@ -40,9 +40,10 @@ router.get("/login",function(req,res){
 //handling login logic
 router.post("/login",passport.authenticate("local",{
 	successRedirect: "/blogs",
-	failureRedirect: "/login"
+	failureRedirect: "/login",
+failureFlash: true // Enable flash messages
 }),function(req,res){});
-	
+
 //LOGOUT 
 router.get("/logout",function(req,res){
 	req.logout();

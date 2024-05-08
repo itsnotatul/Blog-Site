@@ -1,11 +1,10 @@
 {
   "name": "restful-routing",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	   "start":" node app.js"
+    "start": " node app.js"
   },
   "author": "Atul Tiwari",
   "license": "ISC",
@@ -13,7 +12,7 @@
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "ejs": "^3.0.2",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-sanitizer": "^1.0.5",
     "express-session": "^1.17.0",
     "method-override": "^3.0.0",
@@ -22,5 +21,6 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
     "save": "^2.4.0"
-  }
+  },
+  "description": ""
 }
