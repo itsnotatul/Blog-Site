@@ -42,13 +42,14 @@ router.post("/blogs",middleware.isLoggedIn,function(req,res){
 	});
 });
 
-//SHOW Route
+// SHOW Route
 router.get("/blogs/:id",function(req,res){
-var id = mongoose.Types.ObjectId(req.params.id); 
+	var id = mongoose.Types.ObjectId(req.params.id); 
 	Blog.findById(id).populate("comments").exec(function(err,foundBlog){
 		if(err || !foundBlog){
-        req.flash("error","Blog not found");
-			res.redirect("back");
+        	req.flash("error","Blog not found");
+			res.sendStatus(404);
+			// res.redirect("back");
 		}else{
 			res.render("blogs/show",{blog:foundBlog});
 		}
